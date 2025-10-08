@@ -1,0 +1,6 @@
+server:
+  port: ":1323"  # Default port
+
+supabase:
+  url: "https://your-project.supabase.co"
+  anon_key: "your-anon-key"  # Better in .env!
