@@ -1,4 +1,4 @@
-# Item Management Service
+# Supreme MS Item Service
 
 A RESTful API service for managing items with user association, built with Go and Supabase.
 
@@ -21,8 +21,8 @@ A RESTful API service for managing items with user association, built with Go an
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/item-management-service.git
-   cd item-management-service
+   git clone git@github.com:krisadabig/supreme-ms-item.git
+   cd supreme-ms-item
    ```
 
 2. **Set up environment variables**
