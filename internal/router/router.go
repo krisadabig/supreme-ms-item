@@ -18,7 +18,7 @@ func SetupRoutes(e *echo.Echo, itemHandler *handlers.ItemHandler) {
 	itemGroup.GET("/:id", itemHandler.GetItem)
 	itemGroup.GET("/user/:user_id", itemHandler.GetItemsByUserID)
 
-	apiV1.GET("/ping", func(c echo.Context) error {
+	e.GET("/ping", func(c echo.Context) error {
 		return c.String(http.StatusOK, "pong")
 	})
 }

@@ -28,8 +28,6 @@ func Load() (*Config, error) {
 		return nil, err
 	}
 
-	log.Println("viper config:", viper.AllSettings())
-
 	// Load .env file
 	viper.SetConfigFile(".env")
 	viper.SetConfigType("env")
@@ -38,15 +36,10 @@ func Load() (*Config, error) {
 		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
 			return nil, err
 		}
-		// .env file not found; ignore error if desired
-		log.Println(".env file not found")
 	}
-
-	log.Println("viper config after merge:", viper.AllSettings())
 
 	// bind value from .env to viper
 	config := viper.AllSettings()
-	log.Println("config:", config)
 	if config["port"] != nil {
 		viper.Set("server.port", config["port"])
 	}
@@ -66,12 +59,10 @@ func Load() (*Config, error) {
 	viper.BindEnv("supabase.anon_key", "SUPABASE_ANON_KEY")
 
 	var cfg Config
-	log.Println("viper config:", viper.AllSettings())
 	if err := viper.Unmarshal(&cfg); err != nil {
 		log.Println("Failed to unmarshal config:", err)
 		return nil, err
 	}
-	log.Println("config:", cfg)
 
 	return &cfg, nil
 }
