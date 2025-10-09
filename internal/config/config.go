@@ -10,7 +10,8 @@ import (
 
 type Config struct {
 	Server struct {
-		Port string `mapstructure:"port"`
+		Port          string   `mapstructure:"port"`
+		AllowedOrigins []string `mapstructure:"allowed_origins"`
 	} `mapstructure:"server"`
 	Supabase struct {
 		URL     string `mapstructure:"url"`
@@ -33,6 +34,7 @@ func Load() (*Config, error) {
 	viper.SetEnvPrefix("APP")
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_")) // Convert . to _ for env
 	viper.BindEnv("server.port", "PORT")                   // Allow plain PORT too
+	viper.BindEnv("server.allowed_origins", "ALLOWED_ORIGINS")
 	viper.BindEnv("supabase.url", "SUPABASE_URL")
 	viper.BindEnv("supabase.anon_key", "SUPABASE_ANON_KEY")
 
@@ -40,6 +42,18 @@ func Load() (*Config, error) {
 	if err := viper.Unmarshal(&cfg); err != nil {
 		log.Println("Failed to unmarshal config:", err)
 		return nil, err
+	}
+
+	// Handle comma-separated env overrides for allowed origins
+	if raw := viper.GetString("server.allowed_origins"); raw != "" {
+		parts := strings.Split(raw, ",")
+		cfg.Server.AllowedOrigins = cfg.Server.AllowedOrigins[:0]
+		for _, part := range parts {
+			trimmed := strings.TrimSpace(part)
+			if trimmed != "" {
+				cfg.Server.AllowedOrigins = append(cfg.Server.AllowedOrigins, trimmed)
+			}
+		}
 	}
 
 	return &cfg, nil

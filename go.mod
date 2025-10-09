@@ -35,4 +35,5 @@ require (
 	golang.org/x/net v0.40.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/text v0.28.0 // indirect
+	golang.org/x/time v0.11.0 // indirect
 )

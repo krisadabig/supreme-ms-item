@@ -5,6 +5,7 @@ import (
 
 	"item/internal/config"
 	"item/internal/logger"
+	"item/internal/middleware"
 	"item/internal/router"
 
 	"github.com/labstack/echo/v4"
@@ -42,6 +43,7 @@ func Init() *echo.Echo {
 
 	// Initialize Echo
 	e := echo.New()
+	e.Use(middleware.CORSMiddleware(cfg.Server.AllowedOrigins))
 
 	// Initialize Supabase client
 	sb, err := supabase.NewClient(cfg.Supabase.URL, cfg.Supabase.AnonKey, &supabase.ClientOptions{
@@ -68,13 +70,6 @@ func Init() *echo.Echo {
 	// Start server
 	addr := cfg.Server.Port
 	logger.GetGlobalLogger().With("address", addr).Info("starting http server")
-
-	if appEnv == "production" {
-		if err := e.StartTLS(addr, "certs/server.crt", "certs/server.key"); err != nil {
-			logger.Fatal("Failed to start server", err)
-		}
-		return e
-	}
 
 	if err := e.Start(addr); err != nil {
 		logger.Fatal("Failed to start server", err)
