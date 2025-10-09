@@ -69,6 +69,13 @@ func Init() *echo.Echo {
 	addr := cfg.Server.Port
 	logger.GetGlobalLogger().With("address", addr).Info("starting http server")
 
+	if appEnv == "production" {
+		if err := e.StartTLS(addr, "certs/server.crt", "certs/server.key"); err != nil {
+			logger.Fatal("Failed to start server", err)
+		}
+		return e
+	}
+
 	if err := e.Start(addr); err != nil {
 		logger.Fatal("Failed to start server", err)
 	}
