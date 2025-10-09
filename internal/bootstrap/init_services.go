@@ -5,8 +5,8 @@ import (
 	"item/domain"
 )
 
-func InitServices(itemRepo domain.ItemRepository) *application.ItemService {
-	itemService := application.NewItemService(itemRepo)
+func InitServices(itemRepo domain.ItemRepository, logger domain.Logger) *application.ItemService {
+	itemService := application.NewItemService(itemRepo, logger)
 
 	return itemService
 }

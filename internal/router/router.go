@@ -2,12 +2,15 @@ package router
 
 import (
 	"item/adapters/handlers"
+	"item/internal/middleware"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 )
 
 func SetupRoutes(e *echo.Echo, itemHandler *handlers.ItemHandler) {
+	// Add request logging middleware
+	e.Use(middleware.Logger())
 	apiV1 := e.Group("/api/v1")
 
 	itemGroup := apiV1.Group("/items")

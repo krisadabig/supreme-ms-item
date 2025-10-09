@@ -28,31 +28,9 @@ func Load() (*Config, error) {
 		return nil, err
 	}
 
-	// Load .env file
-	viper.SetConfigFile(".env")
-	viper.SetConfigType("env")
-	viper.AddConfigPath(".")
-	if err := viper.MergeInConfig(); err != nil {
-		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
-			return nil, err
-		}
-	}
-
-	// bind value from .env to viper
-	config := viper.AllSettings()
-	if config["port"] != nil {
-		viper.Set("server.port", config["port"])
-	}
-	if config["supabase_url"] != nil {
-		viper.Set("supabase.url", config["supabase_url"])
-	}
-	if config["supabase_anon_key"] != nil {
-		viper.Set("supabase.anon_key", config["supabase_anon_key"])
-	}
-
 	// Override with env vars (prefixed with APP_ for safety)
 	viper.AutomaticEnv()
-	viper.SetEnvPrefix("app")
+	viper.SetEnvPrefix("APP")
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_")) // Convert . to _ for env
 	viper.BindEnv("server.port", "PORT")                   // Allow plain PORT too
 	viper.BindEnv("supabase.url", "SUPABASE_URL")
