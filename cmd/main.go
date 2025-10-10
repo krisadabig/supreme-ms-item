@@ -22,7 +22,7 @@ func main() {
 	// zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 	appEnv := os.Getenv("APP_ENV")
 
-	logLevel := zerolog.InfoLevel
+	logLevel := zerolog.DebugLevel
 	log := logger.New(
 		logger.WithLevel(logLevel),
 		logger.WithOutput(os.Stdout),
