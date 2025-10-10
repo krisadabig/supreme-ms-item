@@ -3,6 +3,7 @@ package http
 import (
 	"net/http"
 
+	"github.com/krisadabig/supreme-ms-item/internal/constants"
 	"github.com/labstack/echo/v4"
 	echoMiddleware "github.com/labstack/echo/v4/middleware"
 )
@@ -30,7 +31,7 @@ func CORSMiddleware(allowedOrigins []string) echo.MiddlewareFunc {
 			echo.HeaderAuthorization,
 			"X-Requested-With",
 			"X-Correlation-Id",
-			"X-User-Id",
+			constants.HeaderUserID,
 		},
 		ExposeHeaders: []string{
 			echo.HeaderAuthorization,

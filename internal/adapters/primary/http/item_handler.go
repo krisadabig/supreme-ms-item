@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/krisadabig/supreme-ms-item/internal/constants"
 	"github.com/krisadabig/supreme-ms-item/internal/core/domain"
 	"github.com/krisadabig/supreme-ms-item/internal/core/ports"
 	"github.com/krisadabig/supreme-ms-item/internal/core/services"
@@ -32,6 +33,13 @@ func (h *ItemHandler) CreateItem(c echo.Context) error {
 		log.With("error", err.Error()).Warn("invalid request payload")
 		return echo.NewHTTPError(http.StatusBadRequest, "Invalid request payload")
 	}
+
+	userID := c.Request().Header.Get(constants.HeaderUserID)
+	if userID == "" {
+		log.Warn("user id is required")
+		return echo.NewHTTPError(http.StatusBadRequest, "userID is required")
+	}
+	item.UserID = userID
 
 	if err := h.itemService.Create(c.Request().Context(), &item); err != nil {
 		log.Error("failed to create item", err)

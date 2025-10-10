@@ -3,6 +3,7 @@ package constants
 // Common HTTP headers
 const (
 	HeaderCorrelationID = "X-Correlation-ID"
+	HeaderUserID        = "X-User-ID"
 )
 
 // Context keys
@@ -12,7 +13,7 @@ const (
 	// ContextCorrelationID is the key used to store the correlation ID in the context
 	ContextCorrelationID contextKey = "correlation_id"
 	// ContextKeyLogger is the key used to store the logger in the context
-	ContextKeyLogger    contextKey = "logger"
+	ContextKeyLogger contextKey = "logger"
 )
 
 // Error messages
