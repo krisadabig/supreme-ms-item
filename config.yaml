@@ -1,8 +1,11 @@
 server:
-  port: ":1323"  # Default port
-  allowed_origins: 
+  port: ":8080"  # Default port
+  allowed_origins:
     - "https://krisadabig.github.io"
 
-supabase:
-  url: "https://your-project.supabase.co"
-  anon_key: "your-anon-key"  # Better in .env!
+database:
+  username: "postgres"
+  password: "postgres"
+  host: "localhost"
+  port: 5432
+  dbname: "postgres"

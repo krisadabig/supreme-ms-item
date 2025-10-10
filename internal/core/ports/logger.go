@@ -1,4 +1,4 @@
-package domain
+package ports
 
 import "context"
 
@@ -15,6 +15,9 @@ type Logger interface {
 
 	// Error logs an error message with the currently attached fields
 	Error(msg string, err error)
+
+	// Fatal logs a fatal message with the currently attached fields and exits the application
+	Fatal(msg string, err error)
 
 	// With attaches a single structured field and returns a child logger
 	With(key string, value any) Logger

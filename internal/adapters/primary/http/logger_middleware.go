@@ -1,4 +1,4 @@
-package middleware
+package http
 
 import (
 	"bytes"
@@ -6,8 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	"item/internal/constants"
-	"item/internal/logger"
+	"github.com/krisadabig/supreme-ms-item/internal/constants"
+	"github.com/krisadabig/supreme-ms-item/internal/core/ports"
+	"github.com/krisadabig/supreme-ms-item/internal/utils/contextutils"
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
@@ -26,7 +27,7 @@ func (rbw *responseBodyWriter) Write(b []byte) (int, error) {
 }
 
 // Logger returns a middleware that logs HTTP requests and responses.
-func Logger() echo.MiddlewareFunc {
+func Logger(log ports.Logger) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			req := c.Request()
@@ -38,20 +39,14 @@ func Logger() echo.MiddlewareFunc {
 				requestID = uuid.NewString()
 			}
 
-			ctx := logger.ContextWithRequestID(req.Context(), requestID)
-			baseLogger := logger.FromContext(ctx)
-			if baseLogger == nil {
-				baseLogger = logger.GetGlobalLogger()
-			}
-			requestLogger := baseLogger.
+			requestLogger := log.
 				With("request_id", requestID).
 				With("method", req.Method).
 				With("path", req.URL.Path).
 				With("remote_ip", c.RealIP())
 
-			ctx = logger.ContextWithLogger(ctx, requestLogger)
-			req = req.WithContext(ctx)
-			c.SetRequest(req)
+			ctx := contextutils.ContextWithRequestID(req.Context(), requestID)
+			c.SetRequest(req.WithContext(ctx))
 
 			// Capture response body for logging
 			res := c.Response()

@@ -1,27 +1,23 @@
-package handlers
+package http
 
 import (
 	"fmt"
 	"net/http"
 	"strconv"
 
-	"item/application"
-	"item/domain"
-	"item/internal/logger"
+	"github.com/krisadabig/supreme-ms-item/internal/core/domain"
+	"github.com/krisadabig/supreme-ms-item/internal/core/ports"
+	"github.com/krisadabig/supreme-ms-item/internal/core/services"
 
 	"github.com/labstack/echo/v4"
 )
 
 type ItemHandler struct {
-	itemService *application.ItemService
-	logger      domain.Logger
+	itemService *services.ItemService
+	logger      ports.Logger
 }
 
-func NewItemHandler(itemService *application.ItemService, log domain.Logger) *ItemHandler {
-	if log == nil {
-		log = logger.GetGlobalLogger()
-	}
-
+func NewItemHandler(itemService *services.ItemService, log ports.Logger) *ItemHandler {
 	return &ItemHandler{
 		itemService: itemService,
 		logger:      log,
@@ -125,6 +121,16 @@ func (h *ItemHandler) GetItemsByUserID(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, items)
+}
+
+func (h *ItemHandler) RegisterRoutes(e *echo.Group) {
+	itemGroup := e.Group("/items")
+	itemGroup.POST("", h.CreateItem)
+	itemGroup.PUT("", h.UpdateItem)
+	itemGroup.DELETE("", h.DeleteItem)
+	itemGroup.GET("", h.GetItems)
+	itemGroup.GET("/:id", h.GetItem)
+	itemGroup.GET("/user/:user_id", h.GetItemsByUserID)
 }
 
 // getIDParam extracts and validates the ID parameter from the request
