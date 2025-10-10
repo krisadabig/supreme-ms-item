@@ -86,7 +86,23 @@ func (h *ItemHandler) DeleteItem(c echo.Context) error {
 func (h *ItemHandler) GetItems(c echo.Context) error {
 	log := h.logger.WithContext(c.Request().Context())
 
-	items, err := h.itemService.GetAll(c.Request().Context())
+	userID := c.Request().Header.Get(constants.HeaderUserID)
+	if userID == "" {
+		log.Warn("user id is required")
+		return echo.NewHTTPError(http.StatusBadRequest, "userID is required")
+	}
+
+	queryall := c.QueryParam("all")
+	if queryall == "true" {
+		items, err := h.itemService.GetAll(c.Request().Context())
+		if err != nil {
+			log.Error("failed to fetch items", err)
+			return echo.NewHTTPError(http.StatusInternalServerError, "Failed to fetch items")
+		}
+		return c.JSON(http.StatusOK, items)
+	}
+
+	items, err := h.itemService.GetByUserID(c.Request().Context(), userID)
 	if err != nil {
 		log.Error("failed to fetch items", err)
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to fetch items")
@@ -116,7 +132,7 @@ func (h *ItemHandler) GetItem(c echo.Context) error {
 func (h *ItemHandler) GetItemsByUserID(c echo.Context) error {
 	log := h.logger.WithContext(c.Request().Context())
 
-	userID := c.Param("userID")
+	userID := c.Request().Header.Get(constants.HeaderUserID)
 	if userID == "" {
 		log.Warn("user id is required")
 		return echo.NewHTTPError(http.StatusBadRequest, "userID is required")
