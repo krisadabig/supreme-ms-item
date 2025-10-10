@@ -59,7 +59,8 @@ func main() {
 
 	// db, err := gormio.Open(postgres.Open(dsn), &gormio.Config{})
 	db, err := gormio.Open(postgres.New(postgres.Config{
-		DSN: dsn,
+		DSN:                  dsn,
+		PreferSimpleProtocol: true,
 	}), &gormio.Config{
 		PrepareStmt: false,
 	})
