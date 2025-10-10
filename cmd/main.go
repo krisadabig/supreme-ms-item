@@ -48,7 +48,7 @@ func main() {
 	apiV1 := e.Group("/api/v1")
 
 	// Initialize database connection
-	dsn := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?pool_mode=session&prepare_statement_mode=simple",
+	dsn := fmt.Sprintf("postgres://%s:%s@%s:%d/%s",
 		cfg.Database.Username,
 		cfg.Database.Password,
 		cfg.Database.Host,
@@ -57,7 +57,14 @@ func main() {
 		// cfg.Database.SSLMode,
 	)
 
-	db, err := gormio.Open(postgres.Open(dsn), &gormio.Config{})
+	// db, err := gormio.Open(postgres.Open(dsn), &gormio.Config{})
+	db, err := gormio.Open(postgres.New(postgres.Config{
+		DSN:                  dsn,
+		PreferSimpleProtocol: true,
+		WithoutReturning:     true,
+	}), &gormio.Config{
+		PrepareStmt: true,
+	})
 	if err != nil {
 		log.Fatal("Failed to connect to database", err)
 	}
