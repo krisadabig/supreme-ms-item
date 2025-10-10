@@ -63,7 +63,7 @@ func main() {
 		PreferSimpleProtocol: true,
 		WithoutReturning:     true,
 	}), &gormio.Config{
-		PrepareStmt: true,
+		PrepareStmt: false,
 	})
 	if err != nil {
 		log.Fatal("Failed to connect to database", err)
