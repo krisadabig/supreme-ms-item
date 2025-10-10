@@ -151,7 +151,7 @@ func (h *ItemHandler) RegisterRoutes(e *echo.Group) {
 	itemGroup := e.Group("/items")
 	itemGroup.POST("", h.CreateItem)
 	itemGroup.PUT("", h.UpdateItem)
-	itemGroup.DELETE("", h.DeleteItem)
+	itemGroup.DELETE("/:id", h.DeleteItem)
 	itemGroup.GET("", h.GetItems)
 	itemGroup.GET("/:id", h.GetItem)
 	itemGroup.GET("/user/:user_id", h.GetItemsByUserID)
