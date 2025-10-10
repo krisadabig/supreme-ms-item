@@ -48,7 +48,7 @@ func main() {
 	apiV1 := e.Group("/api/v1")
 
 	// Initialize database connection
-	dsn := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?pool_mode=session",
+	dsn := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?pool_mode=session&prepare_statement_mode=simple",
 		cfg.Database.Username,
 		cfg.Database.Password,
 		cfg.Database.Host,
