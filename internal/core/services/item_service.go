@@ -1,17 +1,19 @@
-package application
+package services
 
 import (
 	"context"
 	"fmt"
-	"item/domain"
+
+	"github.com/krisadabig/supreme-ms-item/internal/core/domain"
+	"github.com/krisadabig/supreme-ms-item/internal/core/ports"
 )
 
 type ItemService struct {
-	repo   domain.ItemRepository
-	logger domain.Logger
+	repo   ports.ItemRepository
+	logger ports.Logger
 }
 
-func NewItemService(repo domain.ItemRepository, logger domain.Logger) *ItemService {
+func NewItemService(repo ports.ItemRepository, logger ports.Logger) *ItemService {
 	return &ItemService{
 		repo:   repo,
 		logger: logger,
